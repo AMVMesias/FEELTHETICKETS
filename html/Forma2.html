@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Staff</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .table-container {
+            overflow-x: auto;
+            margin-top: 40px;
+        }
+        .staff-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            overflow: hidden;
+        }
+        .staff-table th,
+        .staff-table td {
+            padding: 20px;
+            text-align: left;
+            border-bottom: 1px solid rgba(0, 116, 217, 0.1);
+        }
+        .staff-table th {
+            background: linear-gradient(135deg, #0074D9, #00FFFF);
+            color: white;
+            font-weight: 600;
+        }
+        .staff-table td {
+            color: #333;
+        }
+        .action-btn {
+            background: linear-gradient(135deg, #0074D9, #00FFFF);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 116, 217, 0.4);
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-card">
+            <div class="header">
+                <div class="logo-container">
+                    <i class="fas fa-users logo-icon"></i>
+                    <h1>Gestión de Staff</h1>
+                </div>
+                <p class="subtitle">Administración de personal y pagos</p>
+                <div class="decorative-line"></div>
+            </div>
+
+            <form class="login-form">
+                <!-- Seleccionar Evento -->
+                <div class="input-group">
+                    <label>Seleccionar Evento</label>
+                    <div class="select-wrapper">
+                        <select name="evento">
+                            <option value="">Seleccione un evento</option>
+                            <option value="evento1">Evento 1</option>
+                            <option value="evento2">Evento 2</option>
+                            <option value="evento3">Evento 3</option>
+                        </select>
+                        <i class="fas fa-chevron-down select-arrow"></i>
+                    </div>
+                </div>
+
+                <!-- Seleccionar Estado -->
+                <div class="input-group">
+                    <label>Seleccionar Estado</label>
+                    <div class="select-wrapper">
+                        <select name="estado">
+                            <option value="">Seleccione un estado</option>
+                            <option value="pendientes">Staff Pendientes</option>
+                            <option value="pagados">Staff Pagados</option>
+                        </select>
+                        <i class="fas fa-chevron-down select-arrow"></i>
+                    </div>
+                </div>
+
+                <!-- Tabla de Staff -->
+                <div class="table-container">
+                    <table class="staff-table">
+                        <thead>
+                            <tr>
+                                <th>Cédula</th>
+                                <th>Nombre</th>
+                                <th>Valor</th>
+                                <th>Archivo</th>
+                                <th>Estado</th>
+                                <th>Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Aquí se llenarían los datos dinámicamente -->
+                            <tr>
+                                <td>0991234567001</td>
+                                <td>Juan Pérez</td>
+                                <td>$150.00</td>
+                                <td><a href="#">documento.pdf</a></td>
+                                <td>Pendiente</td>
+                                <td><button class="action-btn">Gestionar</button></td>
+                            </tr>
+                            <!-- Más filas según sea necesario -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <button type="submit" class="login-btn">
+                    Actualizar
+                    <i class="fas fa-arrow-right btn-icon"></i>
+                </button>
+            </form>
+
+            <div class="footer">
+                <div class="event-info">
+                    <i class="fas fa-ticket-alt"></i>
+                    Eventos Artísticos Masivos - Ecuador
+                </div>
+                <p class="copyright">© 2025 Feel the Control. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://kit.fontawesome.com/your-fontawesome-kit.js"></script>
+</body>
+</html>
