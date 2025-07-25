@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feel the Control - Sistema de Login</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="background-animation">
+        <div class="ticket-float ticket-1"></div>
+        <div class="ticket-float ticket-2"></div>
+        <div class="ticket-float ticket-3"></div>
+        <div class="ticket-float ticket-4"></div>
+        <div class="ticket-float ticket-5"></div>
+    </div>
+
+    <div class="login-container">
+        <div class="login-card">
+            <div class="header">
+                <div class="logo-container">
+                    <i class="fas fa-qrcode logo-icon"></i>
+                    <h1>Feel the Control</h1>
+                </div>
+                <p class="subtitle">Sistema de Control de Gastos - Ticketera</p>
+                <div class="decorative-line"></div>
+            </div>
+
+            <form class="login-form" id="loginForm">
+                <div class="input-group">
+                    <label for="userRole">Tipo de Usuario</label>
+                    <div class="select-wrapper">
+                        <select id="userRole" name="userRole" required>
+                            <option value="">Selecciona tu rol</option>
+                            <option value="jefe">Jefe de Ticketera</option>
+                            <option value="staff">Staff</option>
+                        </select>
+                        <i class="fas fa-chevron-down select-arrow"></i>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label for="userId">Identificador Único</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-fingerprint input-icon"></i>
+                        <input type="text" id="userId" name="userId" placeholder="Ingresa tu ID único" required>
+                    </div>
+                    <small class="input-hint">Formato: FTC-JEFE-001 o FTC-STAFF-001</small>
+                </div>
+
+                <div class="remember-forgot">
+                    <label class="remember-me">
+                        <input type="checkbox" id="rememberMe">
+                        <span class="checkmark"></span>
+                        Recordarme
+                    </label>
+                </div>
+
+                <button type="submit" class="login-btn">
+                    <span class="btn-text">Iniciar Sesión</span>
+                    <i class="fas fa-arrow-right btn-icon"></i>
+                </button>
+            </form>
+
+            <div class="footer">
+                <div class="event-info">
+                    <i class="fas fa-guitar"></i>
+                    <span>Eventos Artísticos Masivos - Ecuador</span>
+                </div>
+                <p class="copyright">&copy; 2025 Feel the Control. Todos los derechos reservados.</p>
+            </div>
+        </div>
+
+        <div class="info-panel">
+            <div class="panel-content">
+                <h3>Acceso al Sistema</h3>
+                <div class="role-info">
+                    <div class="role-item">
+                        <i class="fas fa-user-tie"></i>
+                        <div>
+                            <strong>Jefe de Ticketera</strong>
+                            <p>Control total de gastos y operaciones</p>
+                        </div>
+                    </div>
+                    <div class="role-item">
+                        <i class="fas fa-headset"></i>
+                        <div>
+                            <strong>Staff</strong>
+                            <p>Gestión de gastos asignados</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
