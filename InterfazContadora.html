@@ -1,0 +1,169 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Formulario de Gestión de Staff</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="container mx-auto p-4">
+  <h1 class="text-2xl font-bold text-center mb-6">Gestión de Staff</h1>
+
+  <!-- Selección de Evento -->
+  <div class="flex flex-col space-y-2 mb-4">
+    <label class="font-semibold">Seleccionar Evento:</label>
+    <select id="eventoSelect" class="border p-2 rounded">
+      <option value="">Seleccione un evento</option>
+      <option value="Evento 1">Evento 1</option>
+      <option value="Evento 2">Evento 2</option>
+      <option value="Evento 3">Evento 3</option>
+    </select>
+  </div>
+
+  <!-- Selección de Estado -->
+  <div id="estadoSelectContainer" class="flex flex-col space-y-2 mb-4 hidden">
+    <label class="font-semibold">Seleccionar Estado:</label>
+    <select id="estadoSelect" class="border p-2 rounded">
+      <option value="">Seleccione un estado</option>
+      <option value="Pendiente">Staff Pendientes</option>
+      <option value="Pagado">Staff Pagados</option>
+    </select>
+  </div>
+
+  <!-- Tabla de Staff -->
+  <div id="tablaContainer" class="overflow-x-auto hidden">
+    <table id="staffTable" class="min-w-full border-collapse border">
+      <thead>
+        <tr class="bg-gray-200">
+          <th class="border p-2">Cédula</th>
+          <th class="border p-2">Nombre</th>
+          <th class="border p-2">Valor</th>
+          <th class="border p-2">Archivo</th>
+          <th class="border p-2">Estado</th>
+          <th class="border p-2">Acción</th>
+        </tr>
+      </thead>
+      <tbody id="staffTableBody"></tbody>
+    </table>
+  </div>
+
+  <script>
+    // Datos simulados
+    let staffData = [
+    { id: 1, evento: 'Evento 1', cedula: '12345678', nombre: 'Juan Pérez', valor: 100, archivo: 'factura1.pdf', estado: 'Pendiente' },
+    { id: 2, evento: 'Evento 1', cedula: '87654321', nombre: 'María Gómez', valor: 150, archivo: 'factura2.pdf', estado: 'Pagado', comprobante: 'comprobante1.pdf' },
+    { id: 3, evento: 'Evento 1', cedula: '23456789', nombre: 'Pedro López', valor: 180, archivo: 'factura3.pdf', estado: 'Pendiente' },
+    { id: 4, evento: 'Evento 1', cedula: '34567890', nombre: 'Lucía Fernández', valor: 220, archivo: 'factura4.pdf', estado: 'Pagado', comprobante: 'comprobante2.pdf' },
+    { id: 5, evento: 'Evento 2', cedula: '11223344', nombre: 'Carlos López', valor: 200, archivo: 'factura5.pdf', estado: 'Pendiente' },
+    { id: 6, evento: 'Evento 2', cedula: '44556677', nombre: 'Ana Martínez', valor: 250, archivo: 'factura6.pdf', estado: 'Pagado', comprobante: 'comprobante3.pdf' },
+    { id: 7, evento: 'Evento 2', cedula: '55667788', nombre: 'José Rodríguez', valor: 190, archivo: 'factura7.pdf', estado: 'Pendiente' },
+    { id: 8, evento: 'Evento 2', cedula: '66778899', nombre: 'Elena Castro', valor: 170, archivo: 'factura8.pdf', estado: 'Pagado', comprobante: 'comprobante4.pdf' },
+    { id: 9, evento: 'Evento 3', cedula: '55667788', nombre: 'Luis Rodríguez', valor: 300, archivo: 'factura9.pdf', estado: 'Pendiente' },
+    { id: 10, evento: 'Evento 3', cedula: '99887766', nombre: 'Patricia Sánchez', valor: 120, archivo: 'factura10.pdf', estado: 'Pagado', comprobante: 'comprobante5.pdf' },
+    { id: 11, evento: 'Evento 3', cedula: '11223399', nombre: 'Mario Díaz', valor: 250, archivo: 'factura11.pdf', estado: 'Pendiente' },
+    { id: 12, evento: 'Evento 3', cedula: '22334455', nombre: 'Isabel Torres', valor: 200, archivo: 'factura12.pdf', estado: 'Pagado', comprobante: 'comprobante6.pdf' },
+    ];
+
+
+    // Elementos del DOM
+    const eventoSelect = document.getElementById('eventoSelect');
+    const estadoSelectContainer = document.getElementById('estadoSelectContainer');
+    const estadoSelect = document.getElementById('estadoSelect');
+    const tablaContainer = document.getElementById('tablaContainer');
+    const staffTableBody = document.getElementById('staffTableBody');
+
+    // Manejar cambio en la selección de evento
+    eventoSelect.addEventListener('change', () => {
+      const selectedEvento = eventoSelect.value;
+      estadoSelectContainer.classList.toggle('hidden', !selectedEvento);
+      estadoSelect.value = '';
+      tablaContainer.classList.add('hidden');
+      staffTableBody.innerHTML = '';
+    });
+
+    // Manejar cambio en la selección de estado
+    estadoSelect.addEventListener('change', () => {
+      const selectedEvento = eventoSelect.value;
+      const selectedStatus = estadoSelect.value;
+      if (selectedStatus) {
+        renderTable(selectedEvento, selectedStatus);
+      } else {
+        tablaContainer.classList.add('hidden');
+      }
+    });
+
+    // Función para renderizar la tabla
+    function renderTable(evento, estado) {
+      const filteredStaff = staffData.filter(staff => staff.evento === evento && staff.estado === estado);
+      staffTableBody.innerHTML = '';
+
+      if (filteredStaff.length === 0) {
+        staffTableBody.innerHTML = `
+          <tr>
+            <td colspan="6" class="border p-2 text-center">No hay datos disponibles</td>
+          </tr>
+        `;
+      } else {
+        filteredStaff.forEach(staff => {
+          const row = document.createElement('tr');
+          row.className = 'hover:bg-gray-100';
+          row.innerHTML = `
+            <td class="border p-2">${staff.cedula}</td>
+            <td class="border p-2">${staff.nombre}</td>
+            <td class="border p-2">$${staff.valor}</td>
+            <td class="border p-2">
+              <button class="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600" onclick="openFile('${staff.archivo}')">
+                Abrir Archivo
+              </button>
+            </td>
+            <td class="border p-2">${staff.estado}</td>
+            <td class="border p-2">
+              ${staff.estado === 'Pendiente' ?
+                `<button class="bg-green-500 text-white px-2 py-1 rounded hover:bg-green-600" onclick="handlePagar(${staff.id})">Pagado</button>` :
+                `<button class="bg-gray-500 text-white px-2 py-1 rounded hover:bg-gray-600" onclick="openComprobante('${staff.comprobante}')">Ver Comprobante</button>`}
+            </td>
+          `;
+          staffTableBody.appendChild(row);
+        });
+      }
+      tablaContainer.classList.remove('hidden');
+    }
+
+    // Función para abrir archivo
+    function openFile(archivo) {
+      alert(`Abriendo ${archivo}`);
+    }
+
+    // Función para abrir comprobante
+    function openComprobante(comprobante) {
+      alert(`Abriendo ${comprobante}`);
+    }
+
+    // Función para manejar el pago
+    function handlePagar(id) {
+      if (confirm('¿Estás seguro de guardar el pago?')) {
+        const fileInput = document.createElement('input');
+        fileInput.type = 'file';
+        fileInput.accept = '.pdf';
+        fileInput.onchange = (e) => {
+          if (e.target.files.length > 0) {
+            staffData = staffData.map(staff =>
+              staff.id === id
+                ? { ...staff, estado: 'Pagado', comprobante: e.target.files[0].name }
+                : staff
+            );
+            alert('Pago registrado con éxito.');
+            const selectedEvento = eventoSelect.value;
+            const selectedStatus = estadoSelect.value;
+            if (selectedStatus) {
+              renderTable(selectedEvento, selectedStatus);
+            }
+          }
+        };
+        fileInput.click();
+      }
+    }
+  </script>
+</body>
+</html>

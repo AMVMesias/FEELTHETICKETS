@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Jefe - Feel the Control</title>
+    <link rel="stylesheet" href="dashboard-styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <i class="fas fa-qrcode"></i>
+                <span>Feel the Control</span>
+            </div>
+            <div class="user-info">
+                <div class="user-avatar">
+                    <i class="fas fa-user-tie"></i>
+                </div>
+                <div class="user-details">
+                    <span class="user-name" id="userName">Jefe Principal</span>
+                    <span class="user-role">Jefe de Ticketera</span>
+                </div>
+            </div>
+        </div>
+
+        <nav class="sidebar-nav">
+            <ul>
+                <li class="nav-item active">
+                    <a href="#dashboard" class="nav-link">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#gastos" class="nav-link">
+                        <i class="fas fa-receipt"></i>
+                        <span>Control de Gastos</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#personal" class="nav-link">
+                        <i class="fas fa-users"></i>
+                        <span>Gestión de Personal</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#eventos" class="nav-link">
+                        <i class="fas fa-calendar-alt"></i>
+                        <span>Eventos</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#reportes" class="nav-link">
+                        <i class="fas fa-chart-line"></i>
+                        <span>Reportes</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#configuracion" class="nav-link">
+                        <i class="fas fa-cog"></i>
+                        <span>Configuración</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <div class="sidebar-footer">
+            <button class="logout-btn" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Cerrar Sesión</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <header class="top-header">
+            <div class="header-left">
+                <button class="sidebar-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1>Dashboard Principal</h1>
+            </div>
+            <div class="header-right">
+                <div class="notifications">
+                    <button class="notification-btn">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge">3</span>
+                    </button>
+                </div>
+                <div class="date-time">
+                    <span id="currentDateTime"></span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Dashboard Content -->
+        <div class="dashboard-content" id="dashboard">
+            <!-- Stats Cards -->
+            <div class="stats-grid">
+                <div class="stat-card total-gastos">
+                    <div class="stat-icon">
+                        <i class="fas fa-dollar-sign"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>Gastos Totales</h3>
+                        <span class="stat-value">$12,458.90</span>
+                        <span class="stat-change positive">+5.2% vs mes anterior</span>
+                    </div>
+                </div>
+
+                <div class="stat-card eventos-activos">
+                    <div class="stat-icon">
+                        <i class="fas fa-calendar-check"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>Eventos Activos</h3>
+                        <span class="stat-value">8</span>
+                        <span class="stat-change">3 próximos esta semana</span>
+                    </div>
+                </div>
+
+                <div class="stat-card personal-activo">
+                    <div class="stat-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>Personal Activo</h3>
+                        <span class="stat-value">24</span>
+                        <span class="stat-change">15 en servicio hoy</span>
+                    </div>
+                </div>
+
+                <div class="stat-card presupuesto">
+                    <div class="stat-icon">
+                        <i class="fas fa-chart-pie"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>Presupuesto Restante</h3>
+                        <span class="stat-value">$25,500.00</span>
+                        <span class="stat-change negative">-12% usado este mes</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts and Tables Section -->
+            <div class="dashboard-grid">
+                <div class="dashboard-widget chart-widget">
+                    <div class="widget-header">
+                        <h3>Gastos por Categoría</h3>
+                        <select class="period-selector">
+                            <option>Último mes</option>
+                            <option>Últimos 3 meses</option>
+                            <option>Último año</option>
+                        </select>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="gastosChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="dashboard-widget recent-activities">
+                    <div class="widget-header">
+                        <h3>Actividades Recientes</h3>
+                        <button class="view-all-btn">Ver todo</button>
+                    </div>
+                    <div class="activities-list">
+                        <div class="activity-item">
+                            <div class="activity-icon success">
+                                <i class="fas fa-check"></i>
+                            </div>
+                            <div class="activity-content">
+                                <p><strong>María González</strong> registró gasto de $250.00</p>
+                                <span class="activity-time">Hace 2 horas</span>
+                            </div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-icon warning">
+                                <i class="fas fa-exclamation"></i>
+                            </div>
+                            <div class="activity-content">
+                                <p><strong>Carlos Ruiz</strong> excedió límite presupuestario</p>
+                                <span class="activity-time">Hace 4 horas</span>
+                            </div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-icon info">
+                                <i class="fas fa-info"></i>
+                            </div>
+                            <div class="activity-content">
+                                <p>Nuevo evento <strong>"Concierto Rock 2025"</strong> creado</p>
+                                <span class="activity-time">Hace 6 horas</span>
+                            </div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-icon success">
+                                <i class="fas fa-user-plus"></i>
+                            </div>
+                            <div class="activity-content">
+                                <p>Personal <strong>Ana Torres</strong> agregado al sistema</p>
+                                <span class="activity-time">Hace 1 día</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-widget pending-approvals">
+                    <div class="widget-header">
+                        <h3>Gastos Pendientes de Aprobación</h3>
+                        <span class="pending-count">5</span>
+                    </div>
+                    <div class="approvals-list">
+                        <div class="approval-item">
+                            <div class="approval-info">
+                                <h4>Compra Equipo de Sonido</h4>
+                                <p>Solicitado por: <strong>Pedro Martínez</strong></p>
+                                <span class="amount">$1,250.00</span>
+                            </div>
+                            <div class="approval-actions">
+                                <button class="approve-btn">Aprobar</button>
+                                <button class="reject-btn">Rechazar</button>
+                            </div>
+                        </div>
+                        <div class="approval-item">
+                            <div class="approval-info">
+                                <h4>Catering Evento VIP</h4>
+                                <p>Solicitado por: <strong>Laura Vega</strong></p>
+                                <span class="amount">$850.00</span>
+                            </div>
+                            <div class="approval-actions">
+                                <button class="approve-btn">Aprobar</button>
+                                <button class="reject-btn">Rechazar</button>
+                            </div>
+                        </div>
+                        <div class="approval-item">
+                            <div class="approval-info">
+                                <h4>Transporte Personal</h4>
+                                <p>Solicitado por: <strong>Roberto Silva</strong></p>
+                                <span class="amount">$320.00</span>
+                            </div>
+                            <div class="approval-actions">
+                                <button class="approve-btn">Aprobar</button>
+                                <button class="reject-btn">Rechazar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="quick-actions">
+                <h3>Acciones Rápidas</h3>
+                <div class="actions-grid">
+                    <button class="action-btn" onclick="showModal('newExpense')">
+                        <i class="fas fa-plus"></i>
+                        <span>Nuevo Gasto</span>
+                    </button>
+                    <button class="action-btn" onclick="showModal('newEvent')">
+                        <i class="fas fa-calendar-plus"></i>
+                        <span>Crear Evento</span>
+                    </button>
+                    <button class="action-btn" onclick="showModal('addStaff')">
+                        <i class="fas fa-user-plus"></i>
+                        <span>Agregar Personal</span>
+                    </button>
+                    <button class="action-btn" onclick="generateReport()">
+                        <i class="fas fa-file-alt"></i>
+                        <span>Generar Reporte</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Container -->
+    <div id="modalContainer"></div>
+
+    <script src="jefe-dashboard.js"></script>
+</body>
+</html>

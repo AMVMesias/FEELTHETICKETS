@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Staff - Feel the Control</title>
+    <link rel="stylesheet" href="dashboard-styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar staff-sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <i class="fas fa-qrcode"></i>
+                <span>Feel the Control</span>
+            </div>
+            <div class="user-info">
+                <div class="user-avatar">
+                    <i class="fas fa-headset"></i>
+                </div>
+                <div class="user-details">
+                    <span class="user-name" id="userName">Staff Usuario</span>
+                    <span class="user-role">Personal Staff</span>
+                </div>
+            </div>
+        </div>
+
+        <nav class="sidebar-nav">
+            <ul>
+                <li class="nav-item active">
+                    <a href="#dashboard" class="nav-link">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>Mi Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#mis-gastos" class="nav-link">
+                        <i class="fas fa-receipt"></i>
+                        <span>Mis Gastos</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#solicitudes" class="nav-link">
+                        <i class="fas fa-paper-plane"></i>
+                        <span>Solicitudes</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#eventos-asignados" class="nav-link">
+                        <i class="fas fa-calendar-alt"></i>
+                        <span>Eventos Asignados</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#mi-perfil" class="nav-link">
+                        <i class="fas fa-user"></i>
+                        <span>Mi Perfil</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- Sección de Carga de Asistencia en Sidebar -->
+        <div class="sidebar-upload-section">
+            <div class="upload-header">
+                <h4>
+                    <i class="fas fa-file-excel"></i>
+                    Cargar Asistencia
+                </h4>
+            </div>
+            
+            <div class="sidebar-upload-area" id="sidebarUploadArea">
+                <div class="upload-icon">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                </div>
+                <p>Arrastra archivos .xlsx aquí</p>
+                <input type="file" id="sidebarFileInput" multiple accept=".xlsx,.xls" style="display: none;">
+                <button class="sidebar-upload-btn" onclick="document.getElementById('sidebarFileInput').click()">
+                    <i class="fas fa-plus"></i>
+                    Seleccionar
+                </button>
+            </div>
+            
+            <!-- Mini cola de archivos -->
+            <div class="sidebar-queue" id="sidebarQueue" style="display: none;">
+                <div class="queue-header">
+                    <span class="queue-count" id="queueCount">0 archivos</span>
+                    <button class="process-sidebar-btn" id="processSidebarBtn" onclick="processSidebarFiles()">
+                        <i class="fas fa-play"></i>
+                    </button>
+                </div>
+                <div class="sidebar-files-list" id="sidebarFilesList">
+                    <!-- Archivos aparecerán aquí -->
+                </div>
+            </div>
+            
+            <!-- Último archivo procesado -->
+            <div class="last-upload" id="lastUploadInfo" style="display: none;">
+                <div class="last-upload-header">
+                    <i class="fas fa-check-circle"></i>
+                    <span>Último archivo</span>
+                </div>
+                <div class="last-upload-details" id="lastUploadDetails">
+                    <!-- Detalles del último archivo -->
+                </div>
+            </div>
+        </div>
+
+        <div class="sidebar-footer">
+            <button class="logout-btn" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Cerrar Sesión</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <header class="top-header">
+            <div class="header-left">
+                <button class="sidebar-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1>Mi Dashboard</h1>
+            </div>
+            <div class="header-right">
+                <div class="notifications">
+                    <button class="notification-btn">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge">2</span>
+                    </button>
+                </div>
+                <div class="date-time">
+                    <span id="currentDateTime"></span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Dashboard Content -->
+        <div class="dashboard-content" id="dashboard">
+            <!-- Personal Stats -->
+            <div class="stats-grid staff-stats">
+                <div class="stat-card my-expenses">
+                    <div class="stat-icon">
+                        <i class="fas fa-wallet"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>Mis Gastos del Mes</h3>
+                        <span class="stat-value">$1,247.50</span>
+                        <span class="stat-change">Límite: $2,500.00</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 49.9%"></div>
+                    </div>
+                </div>
+
+                <div class="stat-card pending-requests">
+                    <div class="stat-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>Solicitudes Pendientes</h3>
+                        <span class="stat-value">3</span>
+                        <span class="stat-change">2 requieren aprobación</span>
+                    </div>
+                </div>
+
+                <div class="stat-card assigned-events">
+                    <div class="stat-icon">
+                        <i class="fas fa-calendar-check"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>Eventos Asignados</h3>
+                        <span class="stat-value">5</span>
+                        <span class="stat-change">2 esta semana</span>
+                    </div>
+                </div>
+
+                <div class="stat-card budget-status">
+                    <div class="stat-icon">
+                        <i class="fas fa-chart-pie"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>Estado Presupuesto</h3>
+                        <span class="stat-value">50.1%</span>
+                        <span class="stat-change">Disponible: $1,252.50</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions for Staff -->
+            <div class="quick-actions staff-actions">
+                <h3>Acciones Rápidas</h3>
+                <div class="actions-grid">
+                    <button class="action-btn primary" onclick="showModal('newExpense')">
+                        <i class="fas fa-plus"></i>
+                        <span>Registrar Gasto</span>
+                    </button>
+                    <button class="action-btn" onclick="showModal('newRequest')">
+                        <i class="fas fa-paper-plane"></i>
+                        <span>Nueva Solicitud</span>
+                    </button>
+                    <button class="action-btn" onclick="viewMyExpenses()">
+                        <i class="fas fa-list"></i>
+                        <span>Ver Mis Gastos</span>
+                    </button>
+                    <button class="action-btn" onclick="downloadReport()">
+                        <i class="fas fa-download"></i>
+                        <span>Descargar Reporte</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Dashboard Grid for Staff -->
+            <div class="dashboard-grid staff-grid">
+                <!-- Recent Expenses -->
+                <div class="dashboard-widget my-recent-expenses">
+                    <div class="widget-header">
+                        <h3>Mis Gastos Recientes</h3>
+                        <button class="view-all-btn">Ver todos</button>
+                    </div>
+                    <div class="expenses-list">
+                        <div class="expense-item approved">
+                            <div class="expense-icon">
+                                <i class="fas fa-utensils"></i>
+                            </div>
+                            <div class="expense-details">
+                                <h4>Almuerzo Equipo</h4>
+                                <p>Evento: Concierto Rock 2025</p>
+                                <span class="expense-date">Hace 2 días</span>
+                            </div>
+                            <div class="expense-amount">
+                                <span>$45.00</span>
+                                <span class="status approved">Aprobado</span>
+                            </div>
+                        </div>
+                        <div class="expense-item pending">
+                            <div class="expense-icon">
+                                <i class="fas fa-gas-pump"></i>
+                            </div>
+                            <div class="expense-details">
+                                <h4>Combustible</h4>
+                                <p>Transporte material</p>
+                                <span class="expense-date">Hace 1 día</span>
+                            </div>
+                            <div class="expense-amount">
+                                <span>$65.00</span>
+                                <span class="status pending">Pendiente</span>
+                            </div>
+                        </div>
+                        <div class="expense-item approved">
+                            <div class="expense-icon">
+                                <i class="fas fa-shopping-cart"></i>
+                            </div>
+                            <div class="expense-details">
+                                <h4>Materiales Oficina</h4>
+                                <p>Suministros básicos</p>
+                                <span class="expense-date">Hace 3 días</span>
+                            </div>
+                            <div class="expense-amount">
+                                <span>$28.50</span>
+                                <span class="status approved">Aprobado</span>
+                            </div>
+                        </div>
+                        <div class="expense-item rejected">
+                            <div class="expense-icon">
+                                <i class="fas fa-coffee"></i>
+                            </div>
+                            <div class="expense-details">
+                                <h4>Café Reunión</h4>
+                                <p>Reunión con clientes</p>
+                                <span class="expense-date">Hace 4 días</span>
+                            </div>
+                            <div class="expense-amount">
+                                <span>$15.00</span>
+                                <span class="status rejected">Rechazado</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Assigned Events -->
+                <div class="dashboard-widget assigned-events-widget">
+                    <div class="widget-header">
+                        <h3>Mis Eventos Próximos</h3>
+                        <select class="period-selector">
+                            <option>Esta semana</option>
+                            <option>Próximas 2 semanas</option>
+                            <option>Este mes</option>
+                        </select>
+                    </div>
+                    <div class="events-list">
+                        <div class="event-item urgent">
+                            <div class="event-date">
+                                <span class="day">27</span>
+                                <span class="month">JUL</span>
+                            </div>
+                            <div class="event-details">
+                                <h4>Concierto Rock 2025</h4>
+                                <p><i class="fas fa-map-marker-alt"></i> Estadio Olímpico</p>
+                                <p><i class="fas fa-clock"></i> 19:00 - 23:00</p>
+                            </div>
+                            <div class="event-status">
+                                <span class="priority urgent">Urgente</span>
+                            </div>
+                        </div>
+                        <div class="event-item normal">
+                            <div class="event-date">
+                                <span class="day">30</span>
+                                <span class="month">JUL</span>
+                            </div>
+                            <div class="event-details">
+                                <h4>Festival de Jazz</h4>
+                                <p><i class="fas fa-map-marker-alt"></i> Centro Cultural</p>
+                                <p><i class="fas fa-clock"></i> 20:00 - 24:00</p>
+                            </div>
+                            <div class="event-status">
+                                <span class="priority normal">Normal</span>
+                            </div>
+                        </div>
+                        <div class="event-item low">
+                            <div class="event-date">
+                                <span class="day">02</span>
+                                <span class="month">AGO</span>
+                            </div>
+                            <div class="event-details">
+                                <h4>Evento Corporativo</h4>
+                                <p><i class="fas fa-map-marker-alt"></i> Hotel Marriott</p>
+                                <p><i class="fas fa-clock"></i> 18:00 - 22:00</p>
+                            </div>
+                            <div class="event-status">
+                                <span class="priority low">Baja</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Budget Tracking -->
+                <div class="dashboard-widget budget-tracking">
+                    <div class="widget-header">
+                        <h3>Mi Seguimiento de Presupuesto</h3>
+                        <span class="budget-period">Julio 2025</span>
+                    </div>
+                    <div class="budget-content">
+                        <div class="budget-overview">
+                            <div class="budget-circle">
+                                <svg viewBox="0 0 36 36" class="circular-chart">
+                                    <path class="circle-bg" d="M18 2.0845
+                                        a 15.9155 15.9155 0 0 1 0 31.831
+                                        a 15.9155 15.9155 0 0 1 0 -31.831" />
+                                    <path class="circle" stroke-dasharray="50, 100" d="M18 2.0845
+                                        a 15.9155 15.9155 0 0 1 0 31.831
+                                        a 15.9155 15.9155 0 0 1 0 -31.831" />
+                                </svg>
+                                <div class="percentage">50%</div>
+                            </div>
+                            <div class="budget-details">
+                                <div class="budget-item">
+                                    <span class="label">Usado:</span>
+                                    <span class="amount">$1,247.50</span>
+                                </div>
+                                <div class="budget-item">
+                                    <span class="label">Disponible:</span>
+                                    <span class="amount">$1,252.50</span>
+                                </div>
+                                <div class="budget-item total">
+                                    <span class="label">Total Asignado:</span>
+                                    <span class="amount">$2,500.00</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="budget-categories">
+                            <div class="category-item">
+                                <span class="category-name">Transporte</span>
+                                <div class="category-bar">
+                                    <div class="category-fill" style="width: 60%"></div>
+                                </div>
+                                <span class="category-amount">$300</span>
+                            </div>
+                            <div class="category-item">
+                                <span class="category-name">Alimentación</span>
+                                <div class="category-bar">
+                                    <div class="category-fill" style="width: 45%"></div>
+                                </div>
+                                <span class="category-amount">$225</span>
+                            </div>
+                            <div class="category-item">
+                                <span class="category-name">Materiales</span>
+                                <div class="category-bar">
+                                    <div class="category-fill" style="width: 30%"></div>
+                                </div>
+                                <span class="category-amount">$150</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Notifications -->
+            <div class="dashboard-widget notifications-widget">
+                <div class="widget-header">
+                    <h3>Notificaciones</h3>
+                    <button class="mark-read-btn">Marcar como leídas</button>
+                </div>
+                <div class="notifications-list">
+                    <div class="notification-item unread">
+                        <div class="notification-icon success">
+                            <i class="fas fa-check"></i>
+                        </div>
+                        <div class="notification-content">
+                            <p>Tu solicitud de gasto por $65.00 ha sido <strong>aprobada</strong></p>
+                            <span class="notification-time">Hace 1 hora</span>
+                        </div>
+                    </div>
+                    <div class="notification-item unread">
+                        <div class="notification-icon warning">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <div class="notification-content">
+                            <p>Te acercas al límite de tu presupuesto mensual (80%)</p>
+                            <span class="notification-time">Hace 3 horas</span>
+                        </div>
+                    </div>
+                    <div class="notification-item">
+                        <div class="notification-icon info">
+                            <i class="fas fa-calendar"></i>
+                        </div>
+                        <div class="notification-content">
+                            <p>Recordatorio: Evento "Concierto Rock 2025" en 2 días</p>
+                            <span class="notification-time">Hace 1 día</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Carga de Asistencia Content -->
+        <div class="dashboard-content" id="carga-asistencia" style="display: none;">
+            <div class="content-header">
+                <h2><i class="fas fa-file-excel"></i> Carga de Asistencia</h2>
+                <p>Sube archivos .xlsx con los datos de asistencia de eventos</p>
+            </div>
+
+            <!-- File Upload Section -->
+            <div class="upload-section">
+                <div class="upload-widget">
+                    <div class="widget-header">
+                        <h3><i class="fas fa-cloud-upload-alt"></i> Subir Archivos de Asistencia</h3>
+                        <div class="upload-info">
+                            <span>Formatos aceptados: .xlsx, .xls</span>
+                        </div>
+                    </div>
+                    
+                    <div class="upload-area" id="uploadArea">
+                        <div class="upload-content">
+                            <div class="upload-icon">
+                                <i class="fas fa-file-excel"></i>
+                            </div>
+                            <h4>Arrastra archivos aquí o haz clic para seleccionar</h4>
+                            <p>Puedes subir múltiples archivos .xlsx a la vez</p>
+                            <input type="file" id="fileInput" multiple accept=".xlsx,.xls" style="display: none;">
+                            <button class="upload-btn" onclick="document.getElementById('fileInput').click()">
+                                <i class="fas fa-plus"></i>
+                                Seleccionar Archivos
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Files Queue -->
+                <div class="files-queue" id="filesQueue" style="display: none;">
+                    <div class="widget-header">
+                        <h3><i class="fas fa-list"></i> Archivos en Cola</h3>
+                        <button class="clear-queue-btn" onclick="clearQueue()">
+                            <i class="fas fa-trash"></i>
+                            Limpiar Cola
+                        </button>
+                    </div>
+                    <div class="queue-list" id="queueList">
+                        <!-- Files will be dynamically added here -->
+                    </div>
+                    <div class="queue-actions">
+                        <button class="process-btn" onclick="processFiles()">
+                            <i class="fas fa-play"></i>
+                            Procesar Archivos
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Uploaded Files History -->
+            <div class="history-section">
+                <div class="dashboard-widget">
+                    <div class="widget-header">
+                        <h3><i class="fas fa-history"></i> Historial de Cargas</h3>
+                        <div class="filter-controls">
+                            <select id="statusFilter">
+                                <option value="all">Todos los estados</option>
+                                <option value="success">Exitosos</option>
+                                <option value="error">Con errores</option>
+                                <option value="processing">Procesando</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="files-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Archivo</th>
+                                    <th>Evento</th>
+                                    <th>Fecha de Carga</th>
+                                    <th>Registros</th>
+                                    <th>Estado</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="filesHistory">
+                                <tr>
+                                    <td>
+                                        <div class="file-info">
+                                            <i class="fas fa-file-excel file-icon"></i>
+                                            <span>asistencia_concierto_rock_2025.xlsx</span>
+                                        </div>
+                                    </td>
+                                    <td>Concierto Rock 2025</td>
+                                    <td>24/07/2025 14:30</td>
+                                    <td>1,247 registros</td>
+                                    <td><span class="status-badge success">Procesado</span></td>
+                                    <td>
+                                        <button class="action-btn view" onclick="viewFile('file1')" title="Ver detalles">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button class="action-btn download" onclick="downloadFile('file1')" title="Descargar">
+                                            <i class="fas fa-download"></i>
+                                        </button>
+                                        <button class="action-btn delete" onclick="deleteFile('file1')" title="Eliminar">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="file-info">
+                                            <i class="fas fa-file-excel file-icon"></i>
+                                            <span>festival_verano_asistencia.xlsx</span>
+                                        </div>
+                                    </td>
+                                    <td>Festival de Verano</td>
+                                    <td>23/07/2025 09:15</td>
+                                    <td>892 registros</td>
+                                    <td><span class="status-badge success">Procesado</span></td>
+                                    <td>
+                                        <button class="action-btn view" onclick="viewFile('file2')" title="Ver detalles">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button class="action-btn download" onclick="downloadFile('file2')" title="Descargar">
+                                            <i class="fas fa-download"></i>
+                                        </button>
+                                        <button class="action-btn delete" onclick="deleteFile('file2')" title="Eliminar">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="file-info">
+                                            <i class="fas fa-file-excel file-icon"></i>
+                                            <span>gala_benefica_2025.xlsx</span>
+                                        </div>
+                                    </td>
+                                    <td>Gala Benéfica 2025</td>
+                                    <td>22/07/2025 16:45</td>
+                                    <td>156 errores</td>
+                                    <td><span class="status-badge error">Error</span></td>
+                                    <td>
+                                        <button class="action-btn view" onclick="viewFile('file3')" title="Ver detalles">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button class="action-btn reprocess" onclick="reprocessFile('file3')" title="Reprocesar">
+                                            <i class="fas fa-redo"></i>
+                                        </button>
+                                        <button class="action-btn delete" onclick="deleteFile('file3')" title="Eliminar">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Statistics Section -->
+            <div class="stats-section">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-file-upload"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>Archivos Subidos</h3>
+                            <span class="stat-value">15</span>
+                            <span class="stat-change">Este mes</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>Registros Procesados</h3>
+                            <span class="stat-value">12,847</span>
+                            <span class="stat-change">Total asistentes</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>Tasa de Éxito</h3>
+                            <span class="stat-value">96.7%</span>
+                            <span class="stat-change">Archivos procesados</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-calendar-week"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>Eventos Cubiertos</h3>
+                            <span class="stat-value">8</span>
+                            <span class="stat-change">Este mes</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Container -->
+    <div id="modalContainer"></div>
+
+    <script src="staff-dashboard.js"></script>
+</body>
+</html>

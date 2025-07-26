@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feel the Control - Acceso Contadora</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .login-specific {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .login-card-specific {
+            background: rgba(255,255,255,0.95);
+            border-radius: 25px;
+            padding: 50px;
+            max-width: 450px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+            backdrop-filter: blur(10px);
+            border: 3px solid rgba(40,167,69,0.3);
+        }
+
+        .role-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .role-icon-large {
+            font-size: 4rem;
+            color: #28a745;
+            margin-bottom: 20px;
+        }
+
+        .role-title-large {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .role-subtitle {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        .auth-form {
+            margin-top: 30px;
+        }
+
+        .input-group-specific {
+            margin-bottom: 25px;
+        }
+
+        .input-label {
+            display: block;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #e1e5e9;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: #28a745;
+            box-shadow: 0 0 0 3px rgba(40,167,69,0.1);
+        }
+
+        .auth-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+            border: none;
+            padding: 18px;
+            border-radius: 12px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .auth-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(40,167,69,0.3);
+        }
+
+        .back-btn {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: #5a6268;
+        }
+
+        .info-box {
+            background: rgba(40,167,69,0.1);
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 30px;
+            border-left: 4px solid #28a745;
+        }
+
+        .info-title {
+            font-weight: 600;
+            color: #28a745;
+            margin-bottom: 10px;
+        }
+
+        .info-text {
+            color: #666;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-specific">
+        <div class="login-card-specific">
+            <div class="role-header">
+                <div class="role-icon-large">
+                    <i class="fas fa-calculator"></i>
+                </div>
+                <h1 class="role-title-large">Contadora</h1>
+                <p class="role-subtitle">Acceso con código de autorización</p>
+            </div>
+
+            <form class="auth-form" id="contadoraLoginForm">
+                <div class="input-group-specific">
+                    <label class="input-label" for="contadoraCode">Código de Autorización</label>
+                    <input 
+                        type="password" 
+                        id="contadoraCode" 
+                        name="contadoraCode" 
+                        class="input-field"
+                        placeholder="Ingresa tu código de autorización"
+                        required
+                        autocomplete="off"
+                    >
+                </div>
+
+                <button type="submit" class="auth-btn">
+                    <i class="fas fa-file-invoice-dollar"></i>
+                    Acceder al Dashboard
+                </button>
+            </form>
+
+            <button class="back-btn" onclick="goBack()">
+                <i class="fas fa-arrow-left"></i>
+                Volver a Selección de Roles
+            </button>
+
+            <div class="info-box">
+                <div class="info-title">
+                    <i class="fas fa-info-circle"></i>
+                    Códigos Válidos:
+                </div>
+                <div class="info-text">
+                    FTC-CONT-001, FTC-CONT-002
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Datos de contadoras
+        const contadoras = [
+            { code: 'FTC-CONT-001', name: 'Contadora Principal' },
+            { code: 'FTC-CONT-002', name: 'Contadora Auxiliar' }
+        ];
+
+        document.getElementById('contadoraLoginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const code = document.getElementById('contadoraCode').value.trim().toUpperCase();
+            
+            if (!code) {
+                alert('❌ Por favor ingresa el código de autorización');
+                return;
+            }
+
+            const contadora = contadoras.find(c => c.code === code);
+            
+            if (contadora) {
+                // Guardar datos de sesión
+                localStorage.setItem('currentUser', JSON.stringify({
+                    id: contadora.code,
+                    name: contadora.name,
+                    role: 'contadora',
+                    loginTime: new Date().toISOString()
+                }));
+
+                alert(`🎉 ¡Bienvenida ${contadora.name}!\nAccediendo al dashboard...`);
+                
+                setTimeout(() => {
+                    window.location.href = 'contadora-dashboard.html';
+                }, 1000);
+                
+            } else {
+                alert('❌ Código de autorización inválido\n\nCódigos válidos:\n' + 
+                      contadoras.map(c => c.code).join('\n'));
+            }
+        });
+
+        function goBack() {
+            window.location.href = 'index.html';
+        }
+
+        // Efecto de focus en el input
+        document.getElementById('contadoraCode').addEventListener('focus', function() {
+            this.parentElement.style.transform = 'scale(1.02)';
+        });
+
+        document.getElementById('contadoraCode').addEventListener('blur', function() {
+            this.parentElement.style.transform = 'scale(1)';
+        });
+    </script>
+</body>
+</html>

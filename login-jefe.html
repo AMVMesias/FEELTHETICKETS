@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feel the Control - Acceso Jefe</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .login-specific {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0074D9 0%, #00FFFF 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .login-card-specific {
+            background: rgba(255,255,255,0.95);
+            border-radius: 25px;
+            padding: 50px;
+            max-width: 450px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+            backdrop-filter: blur(10px);
+            border: 3px solid rgba(0,116,217,0.3);
+        }
+
+        .role-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .role-icon-large {
+            font-size: 4rem;
+            color: #0074D9;
+            margin-bottom: 20px;
+        }
+
+        .role-title-large {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .role-subtitle {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        .auth-form {
+            margin-top: 30px;
+        }
+
+        .input-group-specific {
+            margin-bottom: 25px;
+        }
+
+        .input-label {
+            display: block;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #e1e5e9;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: #0074D9;
+            box-shadow: 0 0 0 3px rgba(0,116,217,0.1);
+        }
+
+        .auth-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #0074D9, #00FFFF);
+            color: white;
+            border: none;
+            padding: 18px;
+            border-radius: 12px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .auth-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,116,217,0.3);
+        }
+
+        .back-btn {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: #5a6268;
+        }
+
+        .info-box {
+            background: rgba(0,116,217,0.1);
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 30px;
+            border-left: 4px solid #0074D9;
+        }
+
+        .info-title {
+            font-weight: 600;
+            color: #0074D9;
+            margin-bottom: 10px;
+        }
+
+        .info-text {
+            color: #666;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-specific">
+        <div class="login-card-specific">
+            <div class="role-header">
+                <div class="role-icon-large">
+                    <i class="fas fa-user-tie"></i>
+                </div>
+                <h1 class="role-title-large">Jefe de Ticketera</h1>
+                <p class="role-subtitle">Acceso con código de autorización</p>
+            </div>
+
+            <form class="auth-form" id="jefeLoginForm">
+                <div class="input-group-specific">
+                    <label class="input-label" for="jefeCode">Código de Autorización</label>
+                    <input 
+                        type="password" 
+                        id="jefeCode" 
+                        name="jefeCode" 
+                        class="input-field"
+                        placeholder="Ingresa tu código de autorización"
+                        required
+                        autocomplete="off"
+                    >
+                </div>
+
+                <button type="submit" class="auth-btn">
+                    <i class="fas fa-crown"></i>
+                    Acceder al Dashboard
+                </button>
+            </form>
+
+            <button class="back-btn" onclick="goBack()">
+                <i class="fas fa-arrow-left"></i>
+                Volver a Selección de Roles
+            </button>
+
+            <div class="info-box">
+                <div class="info-title">
+                    <i class="fas fa-info-circle"></i>
+                    Códigos Válidos:
+                </div>
+                <div class="info-text">
+                    FTC-JEFE-001, FTC-JEFE-002, FTC-JEFE-003
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Datos de jefes
+        const jefes = [
+            { code: 'FTC-JEFE-001', name: 'Director General' },
+            { code: 'FTC-JEFE-002', name: 'Supervisor Principal' },
+            { code: 'FTC-JEFE-003', name: 'Gerente de Operaciones' }
+        ];
+
+        document.getElementById('jefeLoginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const code = document.getElementById('jefeCode').value.trim().toUpperCase();
+            
+            if (!code) {
+                alert('❌ Por favor ingresa el código de autorización');
+                return;
+            }
+
+            const jefe = jefes.find(j => j.code === code);
+            
+            if (jefe) {
+                // Guardar datos de sesión
+                localStorage.setItem('currentUser', JSON.stringify({
+                    id: jefe.code,
+                    name: jefe.name,
+                    role: 'jefe',
+                    loginTime: new Date().toISOString()
+                }));
+
+                alert(`🎉 ¡Bienvenido ${jefe.name}!\nAccediendo al dashboard...`);
+                
+                setTimeout(() => {
+                    window.location.href = 'jefe-dashboard.html';
+                }, 1000);
+                
+            } else {
+                alert('❌ Código de autorización inválido\n\nCódigos válidos:\n' + 
+                      jefes.map(j => j.code).join('\n'));
+            }
+        });
+
+        function goBack() {
+            window.location.href = 'index.html';
+        }
+
+        // Efecto de focus en el input
+        document.getElementById('jefeCode').addEventListener('focus', function() {
+            this.parentElement.style.transform = 'scale(1.02)';
+        });
+
+        document.getElementById('jefeCode').addEventListener('blur', function() {
+            this.parentElement.style.transform = 'scale(1)';
+        });
+    </script>
+</body>
+</html>

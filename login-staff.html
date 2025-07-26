@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feel the Control - Acceso Staff</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .login-specific {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #ffc107 0%, #ffca2c 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .login-card-specific {
+            background: rgba(255,255,255,0.95);
+            border-radius: 25px;
+            padding: 50px;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+            backdrop-filter: blur(10px);
+            border: 3px solid rgba(255,193,7,0.3);
+        }
+
+        .role-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .role-icon-large {
+            font-size: 4rem;
+            color: #ffc107;
+            margin-bottom: 20px;
+        }
+
+        .role-title-large {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .role-subtitle {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        .auth-form {
+            margin-top: 30px;
+        }
+
+        .input-group-specific {
+            margin-bottom: 25px;
+        }
+
+        .input-label {
+            display: block;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #e1e5e9;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: #ffc107;
+            box-shadow: 0 0 0 3px rgba(255,193,7,0.1);
+        }
+
+        .auth-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #ffc107, #ffca2c);
+            color: #333;
+            border: none;
+            padding: 18px;
+            border-radius: 12px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .auth-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255,193,7,0.3);
+        }
+
+        .auth-btn.secondary {
+            background: #6c757d;
+            color: white;
+            padding: 12px;
+            font-size: 1rem;
+            margin-top: 15px;
+        }
+
+        .auth-btn.secondary:hover {
+            background: #5a6268;
+        }
+
+        .back-btn {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .back-btn:hover {
+            background: #5a6268;
+        }
+
+        .toggle-section {
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            background: rgba(255,193,7,0.1);
+            border-radius: 12px;
+        }
+
+        .toggle-text {
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        .info-box {
+            background: rgba(255,193,7,0.1);
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 30px;
+            border-left: 4px solid #ffc107;
+        }
+
+        .info-title {
+            font-weight: 600;
+            color: #856404;
+            margin-bottom: 10px;
+        }
+
+        .info-text {
+            color: #666;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .form-hidden {
+            display: none;
+        }
+
+        .input-group-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        @media (max-width: 600px) {
+            .input-group-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-specific">
+        <div class="login-card-specific">
+            <div class="role-header">
+                <div class="role-icon-large">
+                    <i class="fas fa-headset"></i>
+                </div>
+                <h1 class="role-title-large">Staff</h1>
+                <p class="role-subtitle" id="formSubtitle">Inicia sesión con tu cédula y contraseña</p>
+            </div>
+
+            <!-- Formulario de Inicio de Sesión -->
+            <form class="auth-form" id="loginForm">
+                <div class="input-group-specific">
+                    <label class="input-label" for="loginCedula">Cédula</label>
+                    <input 
+                        type="text" 
+                        id="loginCedula" 
+                        name="loginCedula" 
+                        class="input-field"
+                        placeholder="Ingresa tu número de cédula"
+                        required
+                        maxlength="10"
+                    >
+                </div>
+
+                <div class="input-group-specific">
+                    <label class="input-label" for="loginPassword">Contraseña</label>
+                    <input 
+                        type="password" 
+                        id="loginPassword" 
+                        name="loginPassword" 
+                        class="input-field"
+                        placeholder="Ingresa tu contraseña"
+                        required
+                    >
+                </div>
+
+                <button type="submit" class="auth-btn">
+                    <i class="fas fa-sign-in-alt"></i>
+                    Iniciar Sesión
+                </button>
+            </form>
+
+            <!-- Formulario de Registro -->
+            <form class="auth-form form-hidden" id="registerForm">
+                <div class="input-group-row">
+                    <div class="input-group-specific">
+                        <label class="input-label" for="registerNombre">Nombre</label>
+                        <input 
+                            type="text" 
+                            id="registerNombre" 
+                            name="registerNombre" 
+                            class="input-field"
+                            placeholder="Tu nombre"
+                            required
+                        >
+                    </div>
+                    <div class="input-group-specific">
+                        <label class="input-label" for="registerApellido">Apellido</label>
+                        <input 
+                            type="text" 
+                            id="registerApellido" 
+                            name="registerApellido" 
+                            class="input-field"
+                            placeholder="Tu apellido"
+                            required
+                        >
+                    </div>
+                </div>
+
+                <div class="input-group-specific">
+                    <label class="input-label" for="registerCedula">Cédula</label>
+                    <input 
+                        type="text" 
+                        id="registerCedula" 
+                        name="registerCedula" 
+                        class="input-field"
+                        placeholder="Número de cédula (10 dígitos)"
+                        required
+                        maxlength="10"
+                        pattern="[0-9]{10}"
+                    >
+                </div>
+
+                <div class="input-group-specific">
+                    <label class="input-label" for="registerEmail">Email</label>
+                    <input 
+                        type="email" 
+                        id="registerEmail" 
+                        name="registerEmail" 
+                        class="input-field"
+                        placeholder="tu.email@ejemplo.com"
+                        required
+                    >
+                </div>
+
+                <div class="input-group-specific">
+                    <label class="input-label" for="registerPassword">Contraseña</label>
+                    <input 
+                        type="password" 
+                        id="registerPassword" 
+                        name="registerPassword" 
+                        class="input-field"
+                        placeholder="Crea una contraseña"
+                        required
+                        minlength="6"
+                    >
+                </div>
+
+                <div class="input-group-specific">
+                    <label class="input-label" for="registerPasswordConfirm">Confirmar Contraseña</label>
+                    <input 
+                        type="password" 
+                        id="registerPasswordConfirm" 
+                        name="registerPasswordConfirm" 
+                        class="input-field"
+                        placeholder="Repite la contraseña"
+                        required
+                        minlength="6"
+                    >
+                </div>
+
+                <button type="submit" class="auth-btn">
+                    <i class="fas fa-user-plus"></i>
+                    Registrarse
+                </button>
+            </form>
+
+            <!-- Sección de toggle entre login y registro -->
+            <div class="toggle-section">
+                <p class="toggle-text" id="toggleText">¿No tienes cuenta?</p>
+                <button type="button" class="auth-btn secondary" id="toggleBtn" onclick="toggleForms()">
+                    Registrarse
+                </button>
+            </div>
+
+            <button class="back-btn" onclick="goBack()">
+                <i class="fas fa-arrow-left"></i>
+                Volver a Selección de Roles
+            </button>
+
+            <div class="info-box">
+                <div class="info-title">
+                    <i class="fas fa-info-circle"></i>
+                    Información del Sistema:
+                </div>
+                <div class="info-text" id="infoText">
+                    Si ya tienes una cuenta, inicia sesión con tu cédula y contraseña. 
+                    Si es tu primera vez, regístrate para crear tu cuenta de staff.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Variables globales
+        let isLoginMode = true;
+        let registeredUsers = JSON.parse(localStorage.getItem('staffUsers')) || [];
+
+        // Inicialización
+        document.addEventListener('DOMContentLoaded', function() {
+            setupEventListeners();
+            console.log('👤 Sistema de Staff cargado');
+            console.log('📊 Usuarios registrados:', registeredUsers.length);
+        });
+
+        function setupEventListeners() {
+            // Login form
+            document.getElementById('loginForm').addEventListener('submit', handleLogin);
+            
+            // Register form
+            document.getElementById('registerForm').addEventListener('submit', handleRegister);
+            
+            // Validación de cédula en tiempo real
+            document.getElementById('loginCedula').addEventListener('input', validateCedula);
+            document.getElementById('registerCedula').addEventListener('input', validateCedula);
+            
+            // Validación de confirmación de contraseña
+            document.getElementById('registerPasswordConfirm').addEventListener('input', validatePasswordMatch);
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            
+            const cedula = document.getElementById('loginCedula').value.trim();
+            const password = document.getElementById('loginPassword').value.trim();
+            
+            if (!cedula || !password) {
+                alert('❌ Por favor completa todos los campos');
+                return;
+            }
+
+            if (!isValidCedula(cedula)) {
+                alert('❌ Formato de cédula inválido (debe tener 10 dígitos)');
+                return;
+            }
+
+            // Buscar usuario en localStorage
+            const user = registeredUsers.find(u => u.cedula === cedula && u.password === password);
+            
+            if (user) {
+                // Login exitoso
+                localStorage.setItem('currentUser', JSON.stringify({
+                    id: user.cedula,
+                    name: `${user.nombre} ${user.apellido}`,
+                    role: 'staff',
+                    cedula: user.cedula,
+                    email: user.email,
+                    loginTime: new Date().toISOString()
+                }));
+
+                alert(`🎉 ¡Bienvenido ${user.nombre}!\nAccediendo al dashboard...`);
+                
+                setTimeout(() => {
+                    window.location.href = 'staff-dashboard.html';
+                }, 1000);
+                
+            } else {
+                alert('❌ Credenciales incorrectas\n\nVerifica tu cédula y contraseña o regístrate si es tu primera vez.');
+            }
+        }
+
+        function handleRegister(e) {
+            e.preventDefault();
+            
+            const nombre = document.getElementById('registerNombre').value.trim();
+            const apellido = document.getElementById('registerApellido').value.trim();
+            const cedula = document.getElementById('registerCedula').value.trim();
+            const email = document.getElementById('registerEmail').value.trim();
+            const password = document.getElementById('registerPassword').value.trim();
+            const passwordConfirm = document.getElementById('registerPasswordConfirm').value.trim();
+            
+            // Validaciones
+            if (!nombre || !apellido || !cedula || !email || !password) {
+                alert('❌ Por favor completa todos los campos');
+                return;
+            }
+
+            if (!isValidCedula(cedula)) {
+                alert('❌ Formato de cédula inválido (debe tener 10 dígitos)');
+                return;
+            }
+
+            if (password.length < 6) {
+                alert('❌ La contraseña debe tener al menos 6 caracteres');
+                return;
+            }
+
+            if (password !== passwordConfirm) {
+                alert('❌ Las contraseñas no coinciden');
+                return;
+            }
+
+            // Verificar si el usuario ya existe
+            if (registeredUsers.find(u => u.cedula === cedula)) {
+                alert('❌ Ya existe un usuario registrado con esta cédula');
+                return;
+            }
+
+            if (registeredUsers.find(u => u.email === email)) {
+                alert('❌ Ya existe un usuario registrado con este email');
+                return;
+            }
+
+            // Registrar nuevo usuario
+            const newUser = {
+                nombre,
+                apellido,
+                cedula,
+                email,
+                password,
+                registrationDate: new Date().toISOString()
+            };
+
+            registeredUsers.push(newUser);
+            localStorage.setItem('staffUsers', JSON.stringify(registeredUsers));
+
+            alert(`✅ ¡Registro exitoso!\n\nBienvenido ${nombre} ${apellido}\nYa puedes iniciar sesión con tu cédula y contraseña.`);
+
+            // Cambiar a modo login y llenar automáticamente la cédula
+            toggleForms();
+            document.getElementById('loginCedula').value = cedula;
+            document.getElementById('loginPassword').focus();
+        }
+
+        function toggleForms() {
+            const loginForm = document.getElementById('loginForm');
+            const registerForm = document.getElementById('registerForm');
+            const toggleBtn = document.getElementById('toggleBtn');
+            const toggleText = document.getElementById('toggleText');
+            const formSubtitle = document.getElementById('formSubtitle');
+            const infoText = document.getElementById('infoText');
+
+            isLoginMode = !isLoginMode;
+
+            if (isLoginMode) {
+                // Mostrar login
+                loginForm.classList.remove('form-hidden');
+                registerForm.classList.add('form-hidden');
+                toggleBtn.textContent = 'Registrarse';
+                toggleText.textContent = '¿No tienes cuenta?';
+                formSubtitle.textContent = 'Inicia sesión con tu cédula y contraseña';
+                infoText.textContent = 'Si ya tienes una cuenta, inicia sesión con tu cédula y contraseña. Si es tu primera vez, regístrate para crear tu cuenta de staff.';
+            } else {
+                // Mostrar registro
+                loginForm.classList.add('form-hidden');
+                registerForm.classList.remove('form-hidden');
+                toggleBtn.textContent = 'Iniciar Sesión';
+                toggleText.textContent = '¿Ya tienes cuenta?';
+                formSubtitle.textContent = 'Regístrate como nuevo staff';
+                infoText.textContent = 'Completa todos los campos para registrarte. Tu cédula será tu nombre de usuario para futuras sesiones.';
+            }
+
+            // Limpiar formularios
+            clearForms();
+        }
+
+        function clearForms() {
+            document.getElementById('loginForm').reset();
+            document.getElementById('registerForm').reset();
+        }
+
+        function validateCedula(e) {
+            const cedula = e.target.value;
+            const isValid = isValidCedula(cedula);
+            
+            if (cedula.length > 0 && !isValid) {
+                e.target.style.borderColor = '#e74c3c';
+            } else {
+                e.target.style.borderColor = '#e1e5e9';
+            }
+        }
+
+        function validatePasswordMatch() {
+            const password = document.getElementById('registerPassword').value;
+            const confirm = document.getElementById('registerPasswordConfirm').value;
+            const confirmField = document.getElementById('registerPasswordConfirm');
+            
+            if (confirm.length > 0 && password !== confirm) {
+                confirmField.style.borderColor = '#e74c3c';
+            } else {
+                confirmField.style.borderColor = '#e1e5e9';
+            }
+        }
+
+        function isValidCedula(cedula) {
+            return /^\d{10}$/.test(cedula);
+        }
+
+        function goBack() {
+            window.location.href = 'index.html';
+        }
+
+        // Efectos de focus en los inputs
+        document.querySelectorAll('.input-field').forEach(input => {
+            input.addEventListener('focus', function() {
+                this.parentElement.style.transform = 'scale(1.02)';
+            });
+
+            input.addEventListener('blur', function() {
+                this.parentElement.style.transform = 'scale(1)';
+            });
+        });
+
+        console.log('✅ Sistema de autenticación de Staff listo');
+    </script>
+</body>
+</html>

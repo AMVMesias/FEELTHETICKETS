@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario para Factura o Nota de Venta</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+        }
+        h2 {
+            color: #34495e;
+            margin-top: 20px;
+        }
+        .form-section {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #34495e;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+        input:focus, select:focus, textarea:focus {
+            border-color: #3498db;
+            outline: none;
+        }
+        .hidden {
+            display: none;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        .legend-note {
+            background-color: #e8f4f8;
+            padding: 10px;
+            border-left: 4px solid #3498db;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+        .error {
+            color: #e74c3c;
+            font-size: 12px;
+            margin-top: -5px;
+            margin-bottom: 10px;
+            display: none;
+        }
+        @media (max-width: 600px) {
+            .container {
+                padding: 15px;
+            }
+            button {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Formulario para Cargar Factura o Nota de Venta</h1>
+        <form id="documentForm" enctype="multipart/form-data">
+            <!-- Selección del tipo de documento -->
+            <div class="form-section">
+                <label for="documentType">Tipo de documento:</label>
+                <select id="documentType" name="documentType" onchange="toggleFields()">
+                    <option value="factura">Factura</option>
+                    <option value="notaVenta">Nota de Venta</option>
+                </select>
+            </div>
+
+            <!-- Campos comunes -->
+            <div class="form-section" id="commonFields">
+                <h2>Información del documento</h2>
+                <label for="issuerRUC">RUC del emisor (13 dígitos):</label>
+                <input type="text" id="issuerRUC" name="issuerRUC" pattern="\d{13}" title="Debe contener 13 dígitos" required>
+                <span class="error" id="issuerRUCError">El RUC debe contener 13 dígitos.</span>
+
+                <label for="issuerName">Nombre o razón social del emisor:</label>
+                <input type="text" id="issuerName" name="issuerName" required>
+
+                <label for="documentNumber">Número de documento:</label>
+                <input type="text" id="documentNumber" name="documentNumber" required>
+                <span class="error" id="documentNumberError">Para facturas, debe tener 15 dígitos (XXX-XXX-XXXXXXXXX).</span>
+
+                <label for="issueDate">Fecha de emisión:</label>
+                <input type="date" id="issueDate" name="issueDate" required>
+
+                <label for="buyerID">RUC o cédula del comprador:</label>
+                <input type="text" id="buyerID" name="buyerID" required>
+
+                <label for="buyerName">Nombre del comprador:</label>
+                <input type="text" id="buyerName" name="buyerName" required>
+
+                <label for="description">Descripción de bienes/servicios:</label>
+                <textarea id="description" name="description" rows="4" required></textarea>
+
+                <label for="quantity">Cantidad:</label>
+                <input type="number" id="quantity" name="quantity" min="1" required>
+
+                <label for="unitPrice">Precio unitario:</label>
+                <input type="number" id="unitPrice" name="unitPrice" step="0.01" min="0" required>
+
+                <label for="totalAmount">Monto total:</label>
+                <input type="number" id="totalAmount" name="totalAmount" step="0.01" min="0" required>
+            </div>
+
+            <!-- Campos específicos para factura -->
+            <div id="invoiceFields" class="form-section hidden">
+                <h2>Información adicional para factura</h2>
+                <label for="issuerAddress">Dirección del emisor:</label>
+                <input type="text" id="issuerAddress" name="issuerAddress">
+
+                <label for="buyerAddress">Dirección del comprador:</label>
+                <input type="text" id="buyerAddress" name="buyerAddress">
+
+                <label for="iva">IVA (Impuesto al Valor Agregado):</label>
+                <input type="number" id="iva" name="iva" step="0.01" min="0">
+
+                <label for="otherTaxes">Otros impuestos (ej. ICE):</label>
+                <input type="number" id="otherTaxes" name="otherTaxes" step="0.01" min="0">
+
+                <label for="expirationDate">Fecha de vencimiento:</label>
+                <input type="date" id="expirationDate" name="expirationDate">
+
+                <label for="digitalSignature">Firma digital (si aplica):</label>
+                <input type="text" id="digitalSignature" name="digitalSignature">
+            </div>
+
+            <!-- Leyenda para nota de venta RIMPE -->
+            <div id="notaVentaLegend" class="form-section hidden">
+                <h2>Leyenda para Nota de Venta RIMPE</h2>
+                <div class="legend-note">
+                    <p>Debe incluir la leyenda: <strong>"Contribuyente RIMPE – Negocio Popular"</strong></p>
+                </div>
+            </div>
+
+            <!-- Carga de documento -->
+            <div class="form-section">
+                <h2>Carga de documento</h2>
+                <label for="documentFile">Subir PDF o imagen:</label>
+                <input type="file" id="documentFile" name="documentFile" accept=".pdf,.jpg,.png" required>
+                <span class="error" id="documentFileError">Por favor, suba un archivo en formato PDF, JPG o PNG.</span>
+            </div>
+
+            <!-- Información bancaria -->
+            <div class="form-section">
+                <h2>Información bancaria</h2>
+                <label for="bankName">Nombre del banco:</label>
+                <select id="bankName" name="bankName" onchange="toggleBankField()">
+                    <option value="Banco Pichincha">Banco Pichincha</option>
+                    <option value="Banco Guayaquil">Banco Guayaquil</option>
+                    <option value="Banco del Pacífico">Banco del Pacífico</option>
+                    <option value="Produbanco">Produbanco</option>
+                    <option value="Banco Internacional">Banco Internacional</option>
+                    <option value="Banco Bolivariano">Banco Bolivariano</option>
+                    <option value="Banco del Austro">Banco del Austro</option>
+                    <option value="Banco de Desarrollo del Ecuador">Banco de Desarrollo del Ecuador</option>
+                    <option value="other">Otro</option>
+                </select>
+                <input type="text" id="otherBank" name="otherBank" placeholder="Especifique el banco" class="hidden">
+
+                <label for="accountHolder">Nombre del titular de la cuenta:</label>
+                <input type="text" id="accountHolder" name="accountHolder" required>
+
+                <label for="accountNumber">Número de cuenta:</label>
+                <input type="text" id="accountNumber" name="accountNumber" required>
+                <span class="error" id="accountNumberError">El número de cuenta debe ser válido (10-20 dígitos).</span>
+
+                <label for="accountType">Tipo de cuenta:</label>
+                <select id="accountType" name="accountType" required>
+                    <option value="ahorros">Ahorros</option>
+                    <option value="corriente">Corriente</option>
+                </select>
+
+                <label for="routingCode">Código de ruta (opcional):</label>
+                <input type="text" id="routingCode" name="routingCode">
+            </div>
+
+            <!-- Botón de envío -->
+            <button type="submit">Enviar formulario</button>
+        </form>
+    </div>
+
+    <script>
+        function toggleFields() {
+            const documentType = document.getElementById('documentType').value;
+            const invoiceFields = document.getElementById('invoiceFields');
+            const notaVentaLegend = document.getElementById('notaVentaLegend');
+            const documentNumber = document.getElementById('documentNumber');
+            const documentNumberError = document.getElementById('documentNumberError');
+
+            if (documentType === 'factura') {
+                invoiceFields.classList.remove('hidden');
+                notaVentaLegend.classList.add('hidden');
+                documentNumber.pattern = "\\d{3}-\\d{3}-\\d{9}";
+                documentNumber.title = "Debe tener 15 dígitos (XXX-XXX-XXXXXXXXX)";
+                documentNumberError.style.display = 'block';
+            } else {
+                invoiceFields.classList.add('hidden');
+                notaVentaLegend.classList.remove('hidden');
+                documentNumber.pattern = "";
+                documentNumber.title = "";
+                documentNumberError.style.display = 'none';
+            }
+        }
+
+        function toggleBankField() {
+            const bankName = document.getElementById('bankName').value;
+            const otherBank = document.getElementById('otherBank');
+            if (bankName === 'other') {
+                otherBank.classList.remove('hidden');
+                otherBank.setAttribute('required', 'required');
+            } else {
+                otherBank.classList.add('hidden');
+                otherBank.removeAttribute('required');
+            }
+        }
+
+        // Validación del formulario
+        document.getElementById('documentForm').addEventListener('submit', function(event) {
+            let valid = true;
+
+            // Validar RUC
+            const issuerRUC = document.getElementById('issuerRUC').value;
+            const issuerRUCError = document.getElementById('issuerRUCError');
+            if (!/^\d{13}$/.test(issuerRUC)) {
+                issuerRUCError.style.display = 'block';
+                valid = false;
+            } else {
+                issuerRUCError.style.display = 'none';
+            }
+
+            // Validar número de documento para factura
+            const documentType = document.getElementById('documentType').value;
+            const documentNumber = document.getElementById('documentNumber').value;
+            const documentNumberError = document.getElementById('documentNumberError');
+            if (documentType === 'factura' && !/^\d{3}-\d{3}-\d{9}$/.test(documentNumber)) {
+                documentNumberError.style.display = 'block';
+                valid = false;
+            } else {
+                documentNumberError.style.display = 'none';
+            }
+
+            // Validar archivo
+            const documentFile = document.getElementById('documentFile').value;
+            const documentFileError = document.getElementById('documentFileError');
+            if (!documentFile.match(/\.(pdf|jpg|png)$/i)) {
+                documentFileError.style.display = 'block';
+                valid = false;
+            } else {
+                documentFileError.style.display = 'none';
+            }
+
+            // Validar número de cuenta
+            const accountNumber = document.getElementById('accountNumber').value;
+            const accountNumberError = document.getElementById('accountNumberError');
+            if (!/^\d{10,20}$/.test(accountNumber)) {
+                accountNumberError.style.display = 'block';
+                valid = false;
+            } else {
+                accountNumberError.style.display = 'none';
+            }
+
+            if (!valid) {
+                event.preventDefault();
+                alert('Por favor, corrija los errores en el formulario.');
+            }
+        });
+
+        // Inicializar visibilidad de campos
+        toggleFields();
+    </script>
+</body>
+</html>
